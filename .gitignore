@@ -31,5 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+.env
 
 API_REST_e_Spring_Boot_Aprenda_do_Zero_e_na_Pratica-001/
