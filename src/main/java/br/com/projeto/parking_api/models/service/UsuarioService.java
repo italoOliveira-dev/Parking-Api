@@ -23,8 +23,13 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UsuarioResponseDto getUsuarioById(Long id) {
-        Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+    public Usuario getUsuarioById(Long id) {
+        return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+    }
+
+    
+    public UsuarioResponseDto getUsuario(Long id) {
+        Usuario user = getUsuarioById(id);
         return UsuarioResponseDto.fromUsuario(user);
     }
 
