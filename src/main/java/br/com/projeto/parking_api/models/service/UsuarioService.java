@@ -1,8 +1,12 @@
 package br.com.projeto.parking_api.models.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import br.com.projeto.parking_api.models.entity.Usuario;
 import br.com.projeto.parking_api.models.repository.UsuarioRepository;
 import br.com.projeto.parking_api.web.dto.UsuarioCreateDto;
 import br.com.projeto.parking_api.web.dto.UsuarioResponseDto;
@@ -13,7 +17,20 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Transactional
     public UsuarioResponseDto newUsuario(UsuarioCreateDto usuarioCreateDto) {
         return UsuarioResponseDto.fromUsuario(usuarioRepository.save(usuarioCreateDto.toUsuario()));
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioResponseDto getUsuarioById(Long id) {
+        Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+        return UsuarioResponseDto.fromUsuario(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDto> getAllUsuarios() {
+        List<UsuarioResponseDto> users = usuarioRepository.findAll().stream().map(UsuarioResponseDto::fromUsuario).toList();
+        return users;
     }
 }
