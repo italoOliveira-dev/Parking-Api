@@ -10,6 +10,7 @@ import br.com.projeto.parking_api.models.entity.Usuario;
 import br.com.projeto.parking_api.models.repository.UsuarioRepository;
 import br.com.projeto.parking_api.web.dto.UsuarioCreateDto;
 import br.com.projeto.parking_api.web.dto.UsuarioResponseDto;
+import br.com.projeto.parking_api.web.dto.UsuarioUpdatePasswordDto;
 
 @Service
 public class UsuarioService {
@@ -37,5 +38,20 @@ public class UsuarioService {
     public List<UsuarioResponseDto> getAllUsuarios() {
         List<UsuarioResponseDto> users = usuarioRepository.findAll().stream().map(UsuarioResponseDto::fromUsuario).toList();
         return users;
+    }
+
+    @Transactional
+    public void updatePasswordUsuario(Long id, UsuarioUpdatePasswordDto updatePasswordDto) {
+        Usuario user = getUsuarioById(id);
+
+        if (!user.getPassword().equals(updatePasswordDto.currentPassword())) {
+            new RuntimeException("Sua senha atual está errada!");
+        }
+
+        if (updatePasswordDto.newPassword().equals(updatePasswordDto.confirmPassword())){
+            new RuntimeException("Senhas não conferem!");
+        }
+
+        user.setPassword(updatePasswordDto.newPassword());
     }
 }
