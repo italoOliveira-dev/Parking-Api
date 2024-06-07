@@ -18,6 +18,7 @@ import br.com.projeto.parking_api.models.service.UsuarioService;
 import br.com.projeto.parking_api.web.dto.UsuarioCreateDto;
 import br.com.projeto.parking_api.web.dto.UsuarioResponseDto;
 import br.com.projeto.parking_api.web.dto.UsuarioUpdatePasswordDto;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/usuarios")
@@ -27,7 +28,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto usuarioCreateDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<UsuarioResponseDto> create(@RequestBody @Valid UsuarioCreateDto usuarioCreateDto, UriComponentsBuilder uriBuilder) {
         UsuarioResponseDto user = usuarioService.newUsuario(usuarioCreateDto);
         URI uri = uriBuilder.path("api/v1/usuarios/{id}").buildAndExpand(user.id()).toUri();
         return ResponseEntity.created(uri).body(user);
@@ -46,7 +47,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody UsuarioUpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody @Valid UsuarioUpdatePasswordDto updatePasswordDto) {
         usuarioService.updatePasswordUsuario(id, updatePasswordDto);
         return ResponseEntity.noContent().build();
     }
