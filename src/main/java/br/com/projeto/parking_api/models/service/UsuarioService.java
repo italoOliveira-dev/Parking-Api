@@ -3,9 +3,11 @@ package br.com.projeto.parking_api.models.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.projeto.parking_api.exception.UsernameValueUniqueException;
 import br.com.projeto.parking_api.models.entity.Usuario;
 import br.com.projeto.parking_api.models.repository.UsuarioRepository;
 import br.com.projeto.parking_api.web.dto.UsuarioCreateDto;
@@ -20,7 +22,11 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioResponseDto newUsuario(UsuarioCreateDto usuarioCreateDto) {
-        return UsuarioResponseDto.fromUsuario(usuarioRepository.save(usuarioCreateDto.toUsuario()));
+        try {
+            return UsuarioResponseDto.fromUsuario(usuarioRepository.save(usuarioCreateDto.toUsuario()));
+        } catch(DataIntegrityViolationException ex) {
+            throw new UsernameValueUniqueException(String.format("Username '%s' já foi cadastrado", usuarioCreateDto.username()));
+        }
     }
 
     @Transactional(readOnly = true)
