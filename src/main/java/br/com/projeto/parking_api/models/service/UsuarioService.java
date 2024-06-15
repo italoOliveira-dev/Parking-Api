@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.projeto.parking_api.exception.EntityNotFoundException;
 import br.com.projeto.parking_api.exception.UsernameValueUniqueException;
 import br.com.projeto.parking_api.models.entity.Usuario;
 import br.com.projeto.parking_api.models.repository.UsuarioRepository;
@@ -31,7 +32,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Usuario getUsuarioById(Long id) {
-        return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+        return usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado.", id)));
     }
 
     

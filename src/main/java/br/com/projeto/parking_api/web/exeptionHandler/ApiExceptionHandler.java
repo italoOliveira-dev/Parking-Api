@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.projeto.parking_api.exception.EntityNotFoundException;
 import br.com.projeto.parking_api.exception.UsernameValueUniqueException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,17 @@ public class ApiExceptionHandler {
     @ExceptionHandler(UsernameValueUniqueException.class)
     public ResponseEntity<ErrorMessage> usernameValueUniqueException(UsernameValueUniqueException ex, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
+
+        log.error("Error - ", ex);
+        return ResponseEntity
+                .status(status)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, status, ex.getMessage()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> entityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
         log.error("Error - ", ex);
         return ResponseEntity
