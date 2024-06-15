@@ -1,4 +1,4 @@
-package br.com.projeto.parking_api.web.exeptionHandler;
+package br.com.projeto.parking_api.web.exceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;

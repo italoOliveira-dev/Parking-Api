@@ -1,4 +1,4 @@
-package br.com.projeto.parking_api.web.exeptionHandler;
+package br.com.projeto.parking_api.web.exceptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
